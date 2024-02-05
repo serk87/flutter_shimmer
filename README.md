@@ -8,7 +8,7 @@ A package provides an easy way to add shimmer effect in Flutter project
 
 Add support shader
 <p>
-    <img width="100" src="https://github.com/serk87/flutter_shimmer/blob/master/screenshots/shader.gif?raw=true"/>
+    <img width="270" src="https://github.com/serk87/flutter_shimmer/blob/master/screenshots/shader.gif?raw=true"/>
 </p>
 
 ## How to use shader
