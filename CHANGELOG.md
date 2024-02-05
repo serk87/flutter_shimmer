@@ -1,4 +1,8 @@
 
+## 3.0.1
+
+* Add support Shader
+
 ## 3.0.0
 
 * upgrade sdk constraint to support Dart 3
