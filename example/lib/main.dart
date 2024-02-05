@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:shimmer/shimmer_from_sheader.dart';
 
 import 'placeholders.dart';
 
@@ -65,43 +69,68 @@ class LoadingListPage extends StatefulWidget {
 }
 
 class _LoadingListPageState extends State<LoadingListPage> {
+  FragmentShader? shader;
+
+  Future<FragmentShader> loadMyShader() async {
+    final program = await FragmentProgram.fromAsset('shaders/shader.frag');
+    shader = program.fragmentShader();
+    return shader!;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Loading List'),
       ),
-      body: Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          enabled: true,
-          child: const SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                BannerPlaceholder(),
-                TitlePlaceholder(width: double.infinity),
-                SizedBox(height: 16.0),
-                ContentPlaceholder(
-                  lineType: ContentLineType.threeLines,
-                ),
-                SizedBox(height: 16.0),
-                TitlePlaceholder(width: 200.0),
-                SizedBox(height: 16.0),
-                ContentPlaceholder(
-                  lineType: ContentLineType.twoLines,
-                ),
-                SizedBox(height: 16.0),
-                TitlePlaceholder(width: 200.0),
-                SizedBox(height: 16.0),
-                ContentPlaceholder(
-                  lineType: ContentLineType.twoLines,
-                ),
-              ],
-            ),
-          )),
+      body: FutureBuilder<FragmentShader>(
+          future: loadMyShader(),
+          builder:
+              (BuildContext context, AsyncSnapshot<FragmentShader> snapshot) {
+            if (snapshot.hasData) {
+              return ShimmerFromShader.fromShader(
+                  shader: snapshot.data!,
+                  child: const SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        BannerPlaceholder(),
+                        TitlePlaceholder(width: double.infinity),
+                        SizedBox(height: 16.0),
+                        ContentPlaceholder(
+                          lineType: ContentLineType.threeLines,
+                        ),
+                        SizedBox(height: 16.0),
+                        TitlePlaceholder(width: 200.0),
+                        SizedBox(height: 16.0),
+                        ContentPlaceholder(
+                          lineType: ContentLineType.twoLines,
+                        ),
+                        SizedBox(height: 16.0),
+                        TitlePlaceholder(width: 200.0),
+                        SizedBox(height: 16.0),
+                        ContentPlaceholder(
+                          lineType: ContentLineType.twoLines,
+                        ),
+                      ],
+                    ),
+                  ));
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
     );
   }
 }
